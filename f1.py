@@ -25,6 +25,18 @@ def get_laps(driver, season, race):
             ret.append(convert(i["Timings"][0]["time"]))
 
         return ret
+    
+def get_pitstops(driver, season, race):
+    driver_pitstops_url = "http://ergast.com/api/f1/" + season + "/" + race + "/drivers/" + driver + "/pitstops.json"
+
+    with urllib.request.urlopen(driver_pitstops_url) as result:
+        data = json.load(result)['MRData']['RaceTable']['Races'][0]['PitStops']
+        ret = []
+
+        for i in data:
+            ret.append(int(i['lap']))
+            
+        return ret
 
 def plot_driver_vs_driver(driver1, driver2, season, race):
     laps1 = get_laps(driver1, season, race)
@@ -52,6 +64,8 @@ def plot_driver_vs_driver(driver1, driver2, season, race):
 def plot_lap_diff(driver1, driver2, season, race):
     laps1 = get_laps(driver1, season, race)
     laps2 = get_laps(driver2, season, race)
+    ps1 = get_pitstops(driver1, season, race)
+    ps2 = get_pitstops(driver2, season, race)
     diff = []
 
     for i in range(len(laps1)):
@@ -61,9 +75,27 @@ def plot_lap_diff(driver1, driver2, season, race):
             break
     fig, ax = plt.subplots()    
     ax.plot(diff)
+
+    added = False
+    for i in ps1:
+        if not added:
+            plt.axvline(i, color = 'green', label = driver1 + " pitstop")
+            added = True
+        else:
+            plt.axvline(i, color = 'green')
+
+    added = False 
+    for i in ps2:
+        if not added:
+            plt.axvline(i, color = 'red', label = driver2 + " pitstop")
+            added = True
+        else:
+            plt.axvline(i, color = 'red')
+    
     plt.ylabel('lap difference from ' + driver1 + 'vs ' + driver2)
     plt.xlabel('laps')
     fig.set_size_inches(15, 9)
+    plt.legend(loc="upper right")
     plt.savefig(driver1 + '_diff_' + driver2 + '_' + season + '_' + race + '.png', dpi = 600)
     plt.show()
 
@@ -75,6 +107,9 @@ if sys.argv[1] == 'vs':
 elif sys.argv[1] == 'diff':
     plot_lap_diff(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     
+    
+            
+
     
             
 
