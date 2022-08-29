@@ -36,7 +36,8 @@ def plot_driver_vs_driver(driver1, driver2, season, race):
     plt.ylabel('lap times')
     plt.xlabel('laps')
     plt.legend(loc="upper right")
-    plt.savefig(driver1 + '_vs_' + driver2 + '_' + season + '_' + race + '.png', dpi = 1000)
+    fig.set_size_inches(15, 9)
+    plt.savefig(driver1 + '_vs_' + driver2 + '_' + season + '_' + race + '.png', dpi = 600)
     plt.show()
 
 def plot_lap_diff(driver1, driver2, season, race):
@@ -49,11 +50,12 @@ def plot_lap_diff(driver1, driver2, season, race):
             diff.append(laps1[i] - laps2[i])
         else:
             break
-        
-    plt.plot(diff)
-    plt.ylabel('lap difference from ' + driver1 + 'vs ' + driver2)
-    plt.xlabel('laps')
-    plt.savefig(driver1 + '_diff_' + driver2 + '_' + season + '_' + race + '.png', dpi = 1000)
+    fig, ax = plt.subplots()    
+    ax.plot(diff)
+    ax.ylabel('lap difference from ' + driver1 + 'vs ' + driver2)
+    ax.xlabel('laps')
+    fig.set_size_inches(15, 9)
+    plt.savefig(driver1 + '_diff_' + driver2 + '_' + season + '_' + race + '.png', dpi = 600)
     plt.show()
 
 
@@ -63,6 +65,10 @@ if sys.argv[1] == 'vs':
 
 elif sys.argv[1] == 'diff':
     plot_lap_diff(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+    
+    
+            
+
     
     
             
