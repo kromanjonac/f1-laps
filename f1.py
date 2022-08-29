@@ -57,8 +57,7 @@ def plot_lap_diff(driver1, driver2, season, race):
     plt.show()
 
 
-import sys
-print(sys.argv[1:])
+
 if sys.argv[1] == 'vs':
     plot_driver_vs_driver(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
 
