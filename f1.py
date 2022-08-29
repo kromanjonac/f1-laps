@@ -29,10 +29,19 @@ def get_laps(driver, season, race):
 def plot_driver_vs_driver(driver1, driver2, season, race):
     laps1 = get_laps(driver1, season, race)
     laps2 = get_laps(driver2, season, race)
+    laps_all = []
+    laps_all.extend(laps1)
+    laps_all.extend(laps2)
+    min_laps = min(laps_all)
+    ymin = min_laps * 0.95
+    mean_lap = sum(laps_all) / len(laps_all)
+    ymax = mean_lap * 1.2
+    
     fig, ax = plt.subplots()
     ax.plot(laps1, label = driver1, marker = "o")
     ax.plot(laps2, label = driver2, marker = "o")
     ax.yaxis.set_major_formatter(mticker.FuncFormatter(update_ticks))
+    plt.ylim(ymin, ymax)
     plt.ylabel('lap times')
     plt.xlabel('laps')
     plt.legend(loc="upper right")
@@ -52,8 +61,8 @@ def plot_lap_diff(driver1, driver2, season, race):
             break
     fig, ax = plt.subplots()    
     ax.plot(diff)
-    ax.ylabel('lap difference from ' + driver1 + 'vs ' + driver2)
-    ax.xlabel('laps')
+    plt.ylabel('lap difference from ' + driver1 + 'vs ' + driver2)
+    plt.xlabel('laps')
     fig.set_size_inches(15, 9)
     plt.savefig(driver1 + '_diff_' + driver2 + '_' + season + '_' + race + '.png', dpi = 600)
     plt.show()
@@ -66,6 +75,9 @@ if sys.argv[1] == 'vs':
 elif sys.argv[1] == 'diff':
     plot_lap_diff(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     
+    
+            
+
     
             
 
